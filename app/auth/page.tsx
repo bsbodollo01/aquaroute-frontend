@@ -55,9 +55,9 @@ export default function AuthPage() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <Card className="w-full max-w-md shadow-lg">
-        <CardHeader className="bg-primary text-primary-foreground rounded-t-lg">
-          <CardTitle className="text-2xl">AquaDeliver</CardTitle>
-          <p className="text-sm opacity-90 mt-2">Water Container Delivery Service</p>
+        <CardHeader className=" text-primary-foreground rounded-t-lg">
+          <CardTitle className="text-foreground text-2xl">AquaDeliver</CardTitle>
+          <p className="text-foreground text-sm opacity-90 mt-2">Water Container Delivery Service</p>
         </CardHeader>
         <CardContent className="pt-6">
           <Tabs value={mode} onValueChange={(v) => setMode(v as 'signin' | 'signup')}>
