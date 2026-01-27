@@ -6,7 +6,7 @@ import { useAuth } from '@/lib/auth-context'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import Link from 'next/link'
-import { Phone, Droplets } from 'lucide-react'
+import { Phone, Droplets, Menu } from 'lucide-react'
 import { Droplet, BarChart3, MapPin } from 'lucide-react'
 
 export default function HomePage() {
@@ -30,8 +30,50 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <div className="min-h-screen flex flex-col items-center justify-center px-6 text-center pt-16">
-        <div className="max-w-7xl">
+      <div className="max-w-full min-h-screen flex flex-col items-center justify-center px-6 text-center">
+        <header className="w-full sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
+              <nav className="w-full px-4 sm:px-6 lg:px-8 py-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="bg-blue-600 p-2 rounded-lg">
+                      <Droplets className="size-6 text-white" />
+                    </div>
+                    <span className="text-2xl">AquaRoute</span>
+                  </div>
+                  <div className="hidden md:flex items-center gap-8">
+                    <a href="#products" aria-disabled className="text-gray-700 hover:text-blue-600 transition-colors">
+                      Products
+                    </a>
+                    <a href="#how-it-works" aria-disabled className="text-gray-700 hover:text-blue-600 transition-colors">
+                      How It Works
+                    </a>
+                    <a href="#about" aria-disabled className="text-gray-700 hover:text-blue-600 transition-colors">
+                      About
+                    </a>
+                    <a href="#contact" aria-disabled className="text-gray-700 hover:text-blue-600 transition-colors">
+                      Contact
+                    </a>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <Link href="/auth">
+                      <Button variant="ghost" className="hidden md:inline-flex">
+                        Sign In
+                      </Button>
+                    </Link>
+                    <Link href="/auth">
+                      <Button className="bg-blue-600 hover:bg-blue-700">
+                        Order Now
+                      </Button>
+                    </Link>
+                    
+                    <Button variant="ghost" size="icon" className="md:hidden">
+                      <Menu className="size-6" />
+                    </Button>
+                  </div>
+                </div>
+              </nav>
+            </header>
+        <div className="max-w-7xl pt-10">
             <div className=" grid lg:grid-cols-2 gap-12 items-center">
               <div className="space-y-8">
                 <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full">
