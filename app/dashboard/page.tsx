@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import Link from 'next/link'
 import { LogOut, MapPin } from 'lucide-react'
+import Navbar from "@/components/BuyerDashboard/Navbar"
 
 interface Order {
   id: string
@@ -69,28 +70,9 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-primary text-primary-foreground shadow-md border-b border-border/10">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">AquaDeliver</h1>
-            <p className="text-sm opacity-90">Welcome, {user.email}</p>
-          </div>
-          <div className="flex gap-3">
-            <Link href="/shops">
-              <Button variant="secondary" size="sm" className="gap-2">
-                <MapPin className="w-4 h-4" />
-                Find Shops
-              </Button>
-            </Link>
-            <Button variant="ghost" size="sm" className="gap-2 text-primary-foreground hover:bg-primary/80" onClick={handleLogout}>
-              <LogOut className="w-4 h-4" />
-              Logout
-            </Button>
-          </div>
-        </div>
-      </header>
+      <Navbar handleLogout={handleLogout} buyerName={user?.email || undefined} />
 
-      <main className="max-w-6xl mx-auto px-6 py-8">
+      <main className="max-w-7xl mx-auto px-6 py-8">
         <div className="grid md:grid-cols-2 gap-8">
           {/* Booking Form */}
           <Card className="shadow-md">
