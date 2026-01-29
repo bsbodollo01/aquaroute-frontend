@@ -1,6 +1,6 @@
 export default function AboutUsPage() {
     return (
-        <section id="about" className="py-20 bg-white">
+        <section id="about" className="py-20 ">
             <div className="max-w-7xl mx-auto px-6">
                 <h2 className="text-4xl font-bold mb-8 text-center text-balance">About AquaRoute</h2>
                 <p className="text-lg text-gray-700 max-w-3xl mx-auto text-center">
