@@ -6,8 +6,12 @@ import { useAuth } from '@/lib/auth-context'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import Link from 'next/link'
-import { Phone, Droplets, Menu } from 'lucide-react'
+import { Phone, Droplets } from 'lucide-react'
 import { Droplet, BarChart3, MapPin } from 'lucide-react'
+import Navbar from '@/components/Navbar/page'
+import HowItWorksPage from '@/components/HowItWorks/page'
+import AboutUsPage from '@/components/AboutUs/page'
+import ContactPage from '@/components/Contact/page'
 
 export default function HomePage() {
   const router = useRouter()
@@ -30,49 +34,8 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
+      <Navbar />
       <div className="max-w-full min-h-screen flex flex-col items-center justify-center px-6 text-center">
-        <header className="w-full sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
-              <nav className="w-full px-4 sm:px-6 lg:px-8 py-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="bg-blue-600 p-2 rounded-lg">
-                      <Droplets className="size-6 text-white" />
-                    </div>
-                    <span className="text-2xl">AquaRoute</span>
-                  </div>
-                  <div className="hidden md:flex items-center gap-8">
-                    <a href="#products" aria-disabled className="text-gray-700 hover:text-blue-600 transition-colors">
-                      Products
-                    </a>
-                    <a href="#how-it-works" aria-disabled className="text-gray-700 hover:text-blue-600 transition-colors">
-                      How It Works
-                    </a>
-                    <a href="#about" aria-disabled className="text-gray-700 hover:text-blue-600 transition-colors">
-                      About
-                    </a>
-                    <a href="#contact" aria-disabled className="text-gray-700 hover:text-blue-600 transition-colors">
-                      Contact
-                    </a>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <Link href="/auth">
-                      <Button variant="ghost" className="hidden md:inline-flex">
-                        Sign In
-                      </Button>
-                    </Link>
-                    <Link href="/auth">
-                      <Button className="bg-blue-600 hover:bg-blue-700">
-                        Order Now
-                      </Button>
-                    </Link>
-                    
-                    <Button variant="ghost" size="icon" className="md:hidden">
-                      <Menu className="size-6" />
-                    </Button>
-                  </div>
-                </div>
-              </nav>
-            </header>
         <div className="max-w-7xl pt-10">
             <div className=" grid lg:grid-cols-2 gap-12 items-center">
               <div className="space-y-8">
@@ -81,11 +44,10 @@ export default function HomePage() {
                   <span className="text-sm">Premium Quality Water</span>
                 </div>
                 <h1 className="text-5xl lg:text-6xl text-left tracking-tight font-semibold text-secondary-foreground">
-                  Pure Water Delivered to Your Door
+                  Clean water, delivered without the hassle.
                 </h1>
                 <p className="text-xl text-left text-gray-600 max-w-lg">
-                  Fresh, purified water delivered straight to your home or office. 
-                  Stay hydrated with our convenient subscription service.
+                  Find trusted water refilling stations near you, place your order in seconds, and get fresh, safe water delivered right to your doorstep—fast, easy, and reliable.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Link href="/auth">
@@ -160,32 +122,13 @@ export default function HomePage() {
           </div>
 
           {/* How It Works */}
-          <Card className="mt-16 p-12 bg-card">
-            <h2 className="text-4xl font-bold mb-12 text-balance">How It Works</h2>
-            <div className="grid md:grid-cols-3 gap-8">
-              <div>
-                <div className="w-14 h-14 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold mb-4 mx-auto">
-                  1
-                </div>
-                <h4 className="font-semibold mb-2">Sign Up</h4>
-                <p className="text-muted-foreground text-sm">Create an account as a customer or shop owner</p>
-              </div>
-              <div>
-                <div className="w-14 h-14 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold mb-4 mx-auto">
-                  2
-                </div>
-                <h4 className="font-semibold mb-2">Book or Manage</h4>
-                <p className="text-muted-foreground text-sm">Book deliveries or manage your shop orders</p>
-              </div>
-              <div>
-                <div className="w-14 h-14 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold mb-4 mx-auto">
-                  3
-                </div>
-                <h4 className="font-semibold mb-2">Track & Complete</h4>
-                <p className="text-muted-foreground text-sm">Track orders and complete deliveries efficiently</p>
-              </div>
-            </div>
-          </Card>
+          <HowItWorksPage />
+
+          {/* About Us */}
+          <AboutUsPage />
+
+          {/* Contact Section */}
+          <ContactPage />
         </div>
       </div>
 
