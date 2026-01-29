@@ -5,12 +5,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { AnimatedSection } from "@/components/AnimatedSection/page"
+import { AnimatedSection } from "@/components/AnimatedSection/AnimatedSection"
 import { motion } from "framer-motion"
 
 export default function ContactPage() {
   return (
-    <section id="#contact">
+    <section id="contact">
          <AnimatedSection className="py-16">
             {/* <AnimatedSection id="contact" className="py-16"> */}
             <div className="w-full px-5 mx-auto">
