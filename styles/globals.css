@@ -10,7 +10,7 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(30.14% 0.17167 265.175);
+  --primary: oklch(0.155 0.311 233.8);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -37,6 +37,10 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --btn-primary: oklch(0.155 0.311 233.8);
+  --btn-primary-foreground: oklch(100% 0.00011 271.152);
+  --btn-secondary: oklch(0.145 0.359 244);
+  --btn-secondary-foreground: oklch(0.985 0 0);
 }
 
 .dark {
@@ -75,8 +79,8 @@
 }
 
 @theme inline {
-  --font-sans: 'Geist', 'Geist Fallback';
-  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --font-sans: 'Poppins', sans-serif;
+  --font-mono: 'Poppins', monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
