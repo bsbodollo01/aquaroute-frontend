@@ -9,10 +9,10 @@ export default function Navbar() {
               <nav className="w-full px-4 sm:px-6 lg:px-8 py-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="bg-blue-600 p-2 rounded-lg">
+                    <div className="bg-[var(--btn-primary)] p-2 rounded-lg">
                       <Droplets className="size-6 text-white" />
                     </div>
-                    <span className="text-2xl">AquaRoute</span>
+                    <span className="text-2xl font-semibold">AquaRoute</span>
                   </div>
                   <div className="hidden md:flex items-center gap-8">
                     <a href="#how-it-works" aria-disabled className="text-gray-700 hover:text-blue-600 transition-colors">
@@ -32,7 +32,7 @@ export default function Navbar() {
                       </Button>
                     </Link>
                     <Link href="/auth">
-                      <Button className="bg-blue-600 hover:bg-blue-700">
+                      <Button className="bg-[var(--btn-primary)] hover:bg-[var(--btn-secondary)]">
                         Order Now
                       </Button>
                     </Link>
