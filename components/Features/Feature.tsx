@@ -3,7 +3,7 @@ import { Droplet, BarChart3, MapPin } from "lucide-react"
 
 export default function FeaturesPage() {
     return (
-        <section id="features" className="py-20 "> 
+        <section id="features" className="py-10"> 
             <div className="grid md:grid-cols-3 gap-6 my-16">
                 <Card className="p-8 hover:shadow-lg transition-shadow">
                     <div className="flex justify-center mb-4">

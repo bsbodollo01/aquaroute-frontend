@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card"
 export default function HowItWorksPage() {
     return (
         <section id="how-it-works" className="py-20 bg-gray-50">
-            <Card className="mt-16 p-12 bg-card">
+            <Card className="p-12 bg-card">
                 <h2 className="text-4xl font-bold mb-12 text-balance">How It Works</h2>
                 <div className="grid md:grid-cols-3 gap-8">
                 <div>
