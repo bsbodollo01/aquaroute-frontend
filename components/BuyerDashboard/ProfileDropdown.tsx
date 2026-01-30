@@ -72,7 +72,7 @@ export function ProfileDropdown({ user }: Props) {
           className="text-red-600 focus:text-red-600"
           onClick={() => {
             // logout logic
-            router.push("/login")
+            router.push("/auth")
           }}
         >
           <LogOut className="mr-2 h-4 w-4" />
