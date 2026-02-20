@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react'
 
-export type UserRole = 'customer' | 'owner'
+export type UserRole = 'BUYER' | 'SELLER'
 
 export interface AuthUser {
   id: string

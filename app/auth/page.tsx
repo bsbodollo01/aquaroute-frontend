@@ -4,53 +4,69 @@ import React from "react"
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuth, type UserRole } from '@/lib/auth-context'
+import { type UserRole } from '@/lib/auth-context'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { registerUser, loginUser } from '@/services/auth'
 
 export default function AuthPage() {
   const router = useRouter()
-  const { signUp, signIn, user } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [role, setRole] = useState<UserRole>('customer')
+  const [role, setRole] = useState<UserRole>('BUYER')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [mode, setMode] = useState<'signin' | 'signup'>('signin')
 
-  if (user) {
-    router.push(user.role === 'owner' ? '/owner' : '/dashboard')
-  }
+  // if (user) {
+  //   router.push(user.role === 'owner' ? '/owner' : '/dashboard')
+  // }
 
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError('')
+ const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError('');
+
     try {
-      await signUp(email, password, role)
-      router.push(role === 'owner' ? '/owner' : '/dashboard')
+      // Call API
+      const data = await registerUser({ email, password, role: role === 'SELLER' ? 'SELLER' : 'BUYER' });
+
+      // Save token
+      localStorage.setItem('token', data.token);
+
+      // Redirect based on role
+      router.push(role === 'SELLER' ? '/owner' : '/dashboard');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Sign up failed')
+      setError(err instanceof Error ? err.message : 'Sign up failed');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError('')
+    e.preventDefault();
+    setIsLoading(true);
+    setError('');
+
     try {
-      await signIn(email, password)
-      router.push(role === 'owner' ? '/owner' : '/dashboard')
+      // Call API
+      const data = await loginUser(email, password);
+
+      // Save token
+      localStorage.setItem('token', data.token);
+
+      // Optional: decode token for user info
+      // const user = jwtDecode(data.token);
+
+      router.push(role === 'SELLER' ? '/owner' : '/dashboard');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Sign in failed')
+      setError(err instanceof Error ? err.message : 'Sign in failed');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
