@@ -1,17 +1,15 @@
-const BASE_URL = "http://localhost:4000";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const apiFetch = async (
   endpoint: string,
   options: RequestInit = {}
 ) => {
-  const token = localStorage.getItem("token");
-
   const res = await fetch(`${BASE_URL}${endpoint}`, {
     headers: {
       "Content-Type": "application/json",
-      ...(token && { Authorization: `Bearer ${token}` })
     },
-    ...options
+    credentials: "include", // sends cookies automatically
+    ...options,
   });
 
   const data = await res.json();

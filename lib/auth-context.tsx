@@ -1,6 +1,7 @@
 'use client'
 
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react'
+import { apiFetch } from '@/lib/api'
 
 export type UserRole = 'BUYER' | 'SELLER'
 
@@ -37,29 +38,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(false)
   }, [])
 
-  const signUp = async (email: string, password: string, role: UserRole) => {
-    // This will integrate with Supabase when you add the integration
-    const newUser: AuthUser = {
-      id: `user_${Date.now()}`,
-      email,
-      role,
-    }
-    localStorage.setItem('auth_user', JSON.stringify(newUser))
-    setUser(newUser)
-  }
-
   const signIn = async (email: string, password: string) => {
-    // This will integrate with Supabase when you add the integration
-    const storedUser = localStorage.getItem('auth_user')
-    if (storedUser) {
-      const user = JSON.parse(storedUser)
-      if (user.email === email) {
-        setUser(user)
-        return
-      }
+    const data = await apiFetch("/login", {
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (data.success) {
+      // Backend handles cookie; frontend just sets state
+      setUser({ id: email, email, role: "BUYER" }); // role can be optional
+    } else {
+      throw new Error("Login failed");
     }
-    throw new Error('Invalid credentials')
-  }
+  };
+
+  const signUp = async (email: string, password: string, role: UserRole) => {
+    const data = await apiFetch("/register", {
+      method: "POST",
+      body: JSON.stringify({ email, password, role }),
+    });
+
+    if (data.success) {
+      setUser({ id: email, email, role });
+    } else {
+      throw new Error("Registration failed");
+    }
+  };
 
   const signOut = () => {
     localStorage.removeItem('auth_user')
