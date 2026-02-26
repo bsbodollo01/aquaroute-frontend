@@ -1,32 +1,13 @@
 
-### Aquaroute
+** Aquaroute **
 
 A Next.js frontend application that helps users locate water refilling stations nearby. This project provides an intuitive interface to search, view, and navigate to the closest water refilling stations.
 
-###📝 Table of Contents
+🚀 ** Demo **
 
-Demo
+[Link Text](https://aqua-routes.vercel.app/)
 
-Features
-
-Tech Stack
-
-Installation
-
-Usage
-
-Project Structure
-
-Contributing
-
-License
-
-🚀 Demo
-
-Add a live demo link here (if available):
-Live Demo
-
-✨ Features
+✨ ** Features **
 
 Search for nearby water refilling stations based on location.
 
@@ -38,7 +19,7 @@ Mobile-friendly, responsive design.
 
 Smooth and fast Next.js frontend experience.
 
-🛠 Tech Stack
+🛠 ** Tech Stack **
 
 Frontend: Next.js, React
 
@@ -50,37 +31,38 @@ State Management: React Context / Redux
 
 Icons: Lucide React
 
-💻 Installation
+💻 ** Installation **
 
 Clone the repository:
 
-git clone https://github.com/yourusername/waterrefill-finder.git
-cd waterrefill-finder
+```git clone https://github.com/yourusername/waterrefill-finder.git
+cd waterrefill-finder```
 
 Install dependencies:
-
+```
 npm install
-# or
+or
 yarn install
-
+```
 Set up environment variables
 Create a .env.local file in the root directory and add your API keys (e.g., for Google Maps):
 
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_api_key_here
-🏃 Usage
+```NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_api_key_here```
+
+🏃 ** Usage **
 
 Run the development server:
-
+```
 npm run dev
-# or
+or
 yarn dev
-
+```
 Open http://localhost:3000
  in your browser.
 
 Start searching for nearby water refilling stations using the app interface.
 
-📁 Project Structure
+📁 ** Project Structure **
 waterrefill-finder/
 ├─ public/                 # Static assets (images, icons)
 ├─ src/
@@ -93,7 +75,8 @@ waterrefill-finder/
 ├─ package.json
 ├─ next.config.js
 └─ README.md
-🤝 Contributing
+
+🤝 ** Contributing **
 
 Contributions are welcome!
 
