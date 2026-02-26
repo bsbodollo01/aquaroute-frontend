@@ -1,9 +1,9 @@
 
-Aquaroute
+### Aquaroute
 
 A Next.js frontend application that helps users locate water refilling stations nearby. This project provides an intuitive interface to search, view, and navigate to the closest water refilling stations.
 
-📝 Table of Contents
+###📝 Table of Contents
 
 Demo
 
