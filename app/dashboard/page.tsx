@@ -1,15 +1,12 @@
 'use client'
 
-import React from "react"
-
-import { useState } from 'react'
+import React, { useState } from "react"
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/auth-context'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import Link from 'next/link'
-import { LogOut, MapPin } from 'lucide-react'
+import { MapPin, Phone, LogOut } from 'lucide-react'
 import Navbar from "@/components/BuyerDashboard/Navbar"
 
 interface Order {
@@ -30,11 +27,6 @@ export default function DashboardPage() {
   const [orders, setOrders] = useState<Order[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
-  if (!user || user.role !== 'customer') {
-    router.push('/auth')
-    return null
-  }
-
   const handleBooking = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
@@ -49,9 +41,8 @@ export default function DashboardPage() {
         createdAt: new Date().toISOString(),
       }
 
-      // Store in localStorage for demo (will be replaced with Supabase)
       const existingOrders = localStorage.getItem('orders') ? JSON.parse(localStorage.getItem('orders')!) : []
-      localStorage.setItem('orders', JSON.stringify([...existingOrders, newOrder]))
+      localStorage.setItem('orders', JSON.stringify([newOrder, ...existingOrders]))
 
       setOrders([newOrder, ...orders])
       setAddress('')
@@ -69,64 +60,62 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <Navbar handleLogout={handleLogout} buyerName={user?.email || undefined} />
 
       <main className="max-w-7xl mx-auto px-6 py-8">
         <div className="grid md:grid-cols-2 gap-8">
+
           {/* Booking Form */}
-          <Card className="shadow-md">
+          <Card className="shadow-lg rounded-xl">
             <CardHeader className="border-b border-border/10 pb-4">
-              <CardTitle>Book Water Container Delivery</CardTitle>
+              <CardTitle className="text-lg font-semibold">Book Water Container Delivery</CardTitle>
             </CardHeader>
             <CardContent className="pt-6">
-              <form onSubmit={handleBooking} className="space-y-4">
+              <form onSubmit={handleBooking} className="space-y-5">
+
+                {/* Gallons */}
                 <div>
                   <label className="block text-sm font-medium mb-2">Number of Gallons</label>
-                  <div className="flex items-center gap-4">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => setGallons(Math.max(1, gallons - 1))}
-                    >
-                      −
-                    </Button>
+                  <div className="flex items-center gap-3">
+                    <Button type="button" variant="outline" onClick={() => setGallons(Math.max(1, gallons - 1))}>−</Button>
                     <Input
                       type="number"
-                      min="1"
+                      min={1}
                       value={gallons}
                       onChange={(e) => setGallons(Math.max(1, parseInt(e.target.value) || 1))}
                       className="w-20 text-center"
                     />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => setGallons(gallons + 1)}
-                    >
-                      +
-                    </Button>
+                    <Button type="button" variant="outline" onClick={() => setGallons(gallons + 1)}>+</Button>
                   </div>
                 </div>
 
+                {/* Address */}
                 <div>
                   <label className="block text-sm font-medium mb-2">Delivery Address</label>
-                  <Input
-                    placeholder="Enter your full address"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    required
-                  />
+                  <div className="flex items-center gap-2">
+                    <MapPin className="text-muted-foreground" size={20} />
+                    <Input
+                      placeholder="Enter your full address"
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      required
+                    />
+                  </div>
                 </div>
 
+                {/* Phone */}
                 <div>
                   <label className="block text-sm font-medium mb-2">Phone Number</label>
-                  <Input
-                    type="tel"
-                    placeholder="+1 (555) 000-0000"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    required
-                  />
+                  <div className="flex items-center gap-2">
+                    <Phone className="text-muted-foreground" size={20} />
+                    <Input
+                      type="tel"
+                      placeholder="+1 (555) 000-0000"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      required
+                    />
+                  </div>
                 </div>
 
                 <Button type="submit" className="w-full" disabled={isLoading}>
@@ -137,17 +126,17 @@ export default function DashboardPage() {
           </Card>
 
           {/* Order History */}
-          <Card className="shadow-md">
+          <Card className="shadow-lg rounded-xl">
             <CardHeader className="border-b border-border/10 pb-4">
-              <CardTitle>Your Orders</CardTitle>
+              <CardTitle className="text-lg font-semibold">Your Orders</CardTitle>
             </CardHeader>
             <CardContent className="pt-6">
               {orders.length === 0 ? (
-                <p className="text-muted-foreground text-center py-8">No orders yet. Start by booking a delivery!</p>
+                <p className="text-center text-muted-foreground py-10">No orders yet. Start by booking a delivery!</p>
               ) : (
                 <div className="space-y-4">
                   {orders.map((order) => (
-                    <div key={order.id} className="border rounded-lg p-4 bg-card">
+                    <Card key={order.id} className="p-4 bg-card border rounded-lg">
                       <div className="flex items-center justify-between mb-2">
                         <h3 className="font-semibold">{order.gallons} Gallon(s)</h3>
                         <span className={`text-xs px-2 py-1 rounded-full ${
@@ -158,17 +147,22 @@ export default function DashboardPage() {
                           {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                         </span>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-1">{order.address}</p>
-                      <p className="text-sm text-muted-foreground">{order.phone}</p>
+                      <p className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
+                        <MapPin size={16} /> {order.address}
+                      </p>
+                      <p className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <Phone size={16} /> {order.phone}
+                      </p>
                       <p className="text-xs text-muted-foreground mt-2">
                         {new Date(order.createdAt).toLocaleDateString()}
                       </p>
-                    </div>
+                    </Card>
                   ))}
                 </div>
               )}
             </CardContent>
           </Card>
+
         </div>
       </main>
     </div>

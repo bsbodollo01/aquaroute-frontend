@@ -1,8 +1,6 @@
 'use client'
 
-import React from "react"
-
-import { useState } from 'react'
+import React, { useState } from "react"
 import { useRouter } from 'next/navigation'
 import { type UserRole } from '@/lib/auth-context'
 import { Button } from '@/components/ui/button'
@@ -20,53 +18,43 @@ export default function AuthPage() {
   const [error, setError] = useState('')
   const [mode, setMode] = useState<'signin' | 'signup'>('signin')
 
-  // if (user) {
-  //   router.push(user.role === 'owner' ? '/owner' : '/dashboard')
-  // }
-
- const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError('');
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+    setError('')
 
     try {
-      // Call API
-      const data = await registerUser({ email, password, role: role === 'SELLER' ? 'SELLER' : 'BUYER' });
-
-      // Save token
-      localStorage.setItem('token', data.token);
+      // Call backend to register user
+      await registerUser({ email, password, role})
+      // Backend should set an HTTP-only cookie with the token
 
       // Redirect based on role
-      router.push(role === 'SELLER' ? '/owner' : '/dashboard');
+      router.push(role === 'SELLER' ? '/owner' : '/dashboard')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Sign up failed');
+      setError(err instanceof Error ? err.message : 'Sign up failed')
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError('');
+    e.preventDefault()
+    setIsLoading(true)
+    setError('')
 
     try {
-      // Call API
-      const data = await loginUser(email, password);
+      // Call backend to log in
+      await loginUser(email, password)
+      // Backend should set an HTTP-only cookie with the token
 
-      // Save token
-      localStorage.setItem('token', data.token);
-
-      // Optional: decode token for user info
-      // const user = jwtDecode(data.token);
-
-      router.push(role === 'SELLER' ? '/owner' : '/dashboard');
+      // Redirect after login
+      router.push(role === 'SELLER' ? '/owner' : '/dashboard')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Sign in failed');
+      setError(err instanceof Error ? err.message : 'Sign in failed')
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
@@ -84,37 +72,11 @@ export default function AuthPage() {
 
             <TabsContent value="signin" className="space-y-4">
               <form onSubmit={handleSignIn} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">Email</label>
-                  <Input
-                    type="email"
-                    placeholder="your@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">Password</label>
-                  <Input
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">Account Type</label>
-                  <select
-                    value={role}
-                    onChange={(e) => setRole(e.target.value as UserRole)}
-                    className="w-full px-3 py-2 border border-input rounded-md bg-background"
-                  >
-                    <option value="customer">Customer</option>
-                    <option value="owner">Owner</option>
-                  </select>
-                </div>
+                <InputGroup
+                  email={email} setEmail={setEmail}
+                  password={password} setPassword={setPassword}
+                  role={role} setRole={setRole}
+                />
                 {error && <p className="text-red-500 text-sm">{error}</p>}
                 <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading ? 'Signing in...' : 'Sign In'}
@@ -124,37 +86,11 @@ export default function AuthPage() {
 
             <TabsContent value="signup" className="space-y-4">
               <form onSubmit={handleSignUp} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">Email</label>
-                  <Input
-                    type="email"
-                    placeholder="your@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">Password</label>
-                  <Input
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">Account Type</label>
-                  <select
-                    value={role}
-                    onChange={(e) => setRole(e.target.value as UserRole)}
-                    className="w-full px-3 py-2 border border-input rounded-md bg-background"
-                  >
-                    <option value="customer">Customer</option>
-                    <option value="owner">Owner</option>
-                  </select>
-                </div>
+                <InputGroup
+                  email={email} setEmail={setEmail}
+                  password={password} setPassword={setPassword}
+                  role={role} setRole={setRole}
+                />
                 {error && <p className="text-red-500 text-sm">{error}</p>}
                 <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading ? 'Creating account...' : 'Sign Up'}
@@ -169,5 +105,43 @@ export default function AuthPage() {
         </CardContent>
       </Card>
     </div>
+  )
+}
+
+function InputGroup({ email, setEmail, password, setPassword, role, setRole }: any) {
+  return (
+    <>
+      <div>
+        <label className="block text-sm font-medium mb-2">Email</label>
+        <Input
+          type="email"
+          placeholder="your@email.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-medium mb-2">Password</label>
+        <Input
+          type="password"
+          placeholder="••••••••"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-medium mb-2">Account Type</label>
+        <select
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          className="w-full px-3 py-2 border border-input rounded-md bg-background"
+        >
+          <option value="BUYER">Customer</option>
+          <option value="SELLER">Owner</option>
+        </select>
+      </div>
+    </>
   )
 }
