@@ -39,27 +39,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const signIn = async (email: string, password: string) => {
-    const data = await apiFetch("/login", {
+    const data = await apiFetch("/auth/login", {
       method: "POST",
       body: JSON.stringify({ email, password }),
     });
 
     if (data.success) {
-      // Backend handles cookie; frontend just sets state
-      setUser({ id: email, email, role: "BUYER" }); // role can be optional
+      setUser({ id: data.user.id, email: data.user.email, role: data.user.role });
     } else {
       throw new Error("Login failed");
     }
   };
 
   const signUp = async (email: string, password: string, role: UserRole) => {
-    const data = await apiFetch("/register", {
+    const data = await apiFetch("/auth/register", {
       method: "POST",
       body: JSON.stringify({ email, password, role }),
     });
 
     if (data.success) {
-      setUser({ id: email, email, role });
+      setUser({ id: data.user.id, email: data.user.email, role: data.user.role });
     } else {
       throw new Error("Registration failed");
     }
