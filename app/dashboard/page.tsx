@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { MapPin, Phone, LogOut } from 'lucide-react'
-import Navbar from "@/components/BuyerDashboard/Navbar"
+import Header from "@/components/SellerDashboard/Header"
 
 interface Order {
   id: string
@@ -19,8 +19,7 @@ interface Order {
 }
 
 export default function DashboardPage() {
-  const router = useRouter()
-  const { user, signOut } = useAuth()
+  const { signOut } = useAuth()
   const [gallons, setGallons] = useState<number>(5)
   const [address, setAddress] = useState('')
   const [phone, setPhone] = useState('')
@@ -53,14 +52,13 @@ export default function DashboardPage() {
     }
   }
 
-  const handleLogout = () => {
-    signOut()
-    router.push('/auth')
-  }
-
   return (
     <div className="min-h-screen bg-background">
-      <Navbar handleLogout={handleLogout} buyerName={user?.email || undefined} />
+      <Header
+          logo='qwe'
+          user='test'
+          onLogout={signOut}
+      />
 
       <main className="max-w-7xl mx-auto px-6 py-8">
         <div className="grid md:grid-cols-2 gap-8">

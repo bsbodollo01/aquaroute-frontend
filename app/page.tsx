@@ -14,11 +14,11 @@ export default function HomePage() {
   const router = useRouter()
   const { user, loading } = useAuth()
 
-  useEffect(() => {
-    if (!loading && user) {
-      router.push(user.role === 'owner' ? '/owner' : '/dashboard')
-    }
-  }, [user, loading, router])
+  // useEffect(() => {
+  //   if (!loading && user) {
+  //     router.push(user.role === 'owner' ? '/owner' : '/dashboard')
+  //   }
+  // }, [user, loading, router])
 
   if (loading) {
     return (
