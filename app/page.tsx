@@ -29,10 +29,10 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-slate-100">
       <Navbar />
-      <div className="max-w-full min-h-screen flex flex-col items-center justify-center px-6 text-center bg-primary-foreground">
-        <div className="max-w-7xl pt-10 bg-primary-foreground">
+      <div className="max-w-full min-h-screen flex flex-col items-center justify-center px-6 text-center bg-slate-100">
+        <div className="max-w-7xl pt-10 bg-slate-100">
           {/* Hero Section */}
           <HeroPage />
             

@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button";
 
 export default function Navbar() {
     return (
-        <header className="w-full sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
+        <header className="w-full sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-xs border-b border-gray-200">
               <nav className="w-full px-4 sm:px-6 lg:px-8 py-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="bg-[var(--btn-primary)] p-2 rounded-lg">
+                    <div className="bg-(--btn-primary) p-2 rounded-lg">
                       <Droplets className="size-6 text-white" />
                     </div>
                     <span className="text-2xl font-semibold">AquaRoute</span>

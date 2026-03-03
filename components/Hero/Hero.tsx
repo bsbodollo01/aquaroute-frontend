@@ -4,9 +4,9 @@ import Link from "next/link";
 
 export default function HeroPage() {
     return (
-        <div className="grid lg:grid-cols-2 gap-12 items-center mb-10">
+        <div className="grid lg:grid-cols-2 gap-12 items-center mb-10 bg-slate-100">
               <div className="space-y-8">
-                <div className="inline-flex items-center gap-2 bg-[var(--primary)] text-[var(--primary-foreground)] px-4 py-2 rounded-full">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full">
                   <Droplets className="size-4" />
                   <span className="text-sm">Premium Quality Water</span>
                 </div>

@@ -10,7 +10,7 @@ interface HeaderProps {
   onLogout?: () => void
 }
 
-const Navbar = ({ logo, user, onLogout }: HeaderProps) => {
+const Header = ({ logo, user, onLogout }: HeaderProps) => {
   return (
     <header className="bg-white shadow-md border-b border-border/10">
       <div className="max-w-full mx-auto p-5 flex items-center justify-between">
@@ -33,4 +33,4 @@ const Navbar = ({ logo, user, onLogout }: HeaderProps) => {
   )
 }
 
-export default Navbar
+export default Header
