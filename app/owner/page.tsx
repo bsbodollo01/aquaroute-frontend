@@ -1,10 +1,15 @@
+"use client";
+
+import ProtectedRoute from "@/components/ProtectedRoute";
 import Dashboard from "@/components/SellerDashboard/Dashboard"
 
-
-export default function OwnerDashboard() {
+export default function SellerDashboard() {
   return (
-    <div>
+    <ProtectedRoute allowedRole="SELLER">
+      <div>
         <Dashboard/>
-    </div>
-  )
+      </div>
+    </ProtectedRoute>
+  );
 }
+

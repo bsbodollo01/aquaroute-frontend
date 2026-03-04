@@ -54,6 +54,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  const redirectByRole = (role: UserRole) => {
+    return role === "BUYER"
+      ? "/buyer/dashboard"
+      : "/seller/dashboard";
+  };
+
   const handleAuthSuccess = (data: any) => {
     const authUser: AuthUser = {
       id: data.user.id,
@@ -65,6 +71,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (data.token) localStorage.setItem(STORAGE_TOKEN_KEY, data.token);
 
     setUser(authUser);
+
+    // 🔥 Redirect immediately based on role
+    router.push(redirectByRole(authUser.role));
   };
 
   const signIn = async (email: string, password: string) => {
@@ -76,7 +85,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!data.success) throw new Error(data.message || "Login failed");
 
     handleAuthSuccess(data);
-    router.push("/");
   };
 
   const signUp = async (email: string, password: string, role: UserRole) => {
@@ -88,7 +96,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!data.success) throw new Error(data.message || "Registration failed");
 
     handleAuthSuccess(data);
-    router.push("/");
   };
 
   const signOut = () => {

@@ -40,8 +40,15 @@ export default function AuthPage() {
     setError('')
 
     try {
-      await loginUser(email, password)
-      router.push(role === 'SELLER' ? '/owner' : '/dashboard')
+      const data = await loginUser(email, password)
+
+      localStorage.setItem("auth_user", JSON.stringify(data.user))
+      localStorage.setItem("token", data.token)
+
+      router.push(
+        data.user.role === "SELLER" ? "/owner" : "/dashboard"
+      )
+
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Sign in failed')
     } finally {
