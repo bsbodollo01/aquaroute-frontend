@@ -13,7 +13,7 @@ import { Order } from "@/utils/orderTypes"
 import OrderHistory from "../Orders/OrderHistory"
 
 export default function DashboardPage() {
-  const { user, signOut } = useAuth()
+  const { user, logout } = useAuth()
   const [gallons, setGallons] = useState<number>(5)
   const [address, setAddress] = useState('')
   const [phone, setPhone] = useState('')
@@ -57,7 +57,7 @@ export default function DashboardPage() {
       <Header
           logo='qwe'
           user='test'
-          onLogout={signOut}
+          onLogout={logout}
       />
 
       <main className="max-w-7xl mx-auto px-6 py-8">

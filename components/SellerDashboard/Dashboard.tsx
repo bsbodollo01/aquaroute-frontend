@@ -13,7 +13,7 @@ import { Order } from "@/utils/orderTypes"
 import { useState } from "react"
 
 export default function Dashboard() {
-  const { signOut } = useAuth()
+  const { logout } = useAuth()
   const [orders, setOrders] = useState<Order[]>(sampleOrders)
 
   const handleUpdateStatus = (orderId: string, status: Order['status']) => {
@@ -27,7 +27,7 @@ export default function Dashboard() {
         <Header
             logo='qwe'
             user='test'
-            onLogout={signOut}
+            onLogout={logout}
         />
         <main className="max-w-7xl mx-auto px-6 py-8 flex flex-col gap-5">
           <Greetings/>

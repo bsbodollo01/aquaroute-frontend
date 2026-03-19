@@ -1,25 +1,25 @@
 'use client'
 
 import React, { useState } from "react"
-import { useRouter } from 'next/navigation'
-import { type UserRole } from '@/lib/auth-context'
+import { type UserRole, useAuth } from "@/lib/auth-context"
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { registerUser } from '@/services/auth'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Lock, Mail, Eye, EyeOff } from "lucide-react"
-import { useAuth } from "@/lib/auth-context"
 
 export default function AuthPage() {
-  const router = useRouter()
+  const { signIn, signUp } = useAuth()
+  
+  // Form States
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [role, setRole] = useState<UserRole>('BUYER')
+  
+  // UI States
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [mode, setMode] = useState<'signin' | 'signup'>('signin')
-  const { signIn } = useAuth()
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -27,11 +27,9 @@ export default function AuthPage() {
     setError('')
 
     try {
-      await registerUser({ email, password, role })
-      router.push(role === 'SELLER' ? '/owner' : '/dashboard')
+      await signUp(email, password, role)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Sign up failed')
-    } finally {
       setIsLoading(false)
     }
   }
@@ -42,67 +40,68 @@ export default function AuthPage() {
     setError('')
   
     try {
-      await signIn(email, password) // ✅ use context
+      await signIn(email, password)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Sign in failed')
-    } finally {
       setIsLoading(false)
     }
   }
 
   return (
     <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-lg">
-        <CardHeader className="text-primary-foreground rounded-t-lg">
-          <CardTitle className="text-foreground text-2xl">AquaRoute</CardTitle>
-          <p className="text-foreground text-sm opacity-90">{mode === 'signup' ? "Login to your account" : "Sign up to your account"}</p>
+      <Card className="w-full max-w-md shadow-lg border-none">
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-2xl font-bold text-center">AquaRoute</CardTitle>
+          <p className="text-sm text-muted-foreground text-center">
+            {mode === 'signup' ? "Create a new account" : "Welcome back"}
+          </p>
         </CardHeader>
-        <CardContent className="pt-6">
-          <Tabs value={mode} onValueChange={(v) => setMode(v as 'signin' | 'signup')}>
-            <TabsList className="grid w-full grid-cols-2 mb-4">
-              <TabsTrigger className={mode === 'signin' ? "bg-blue-500" : ""} value="signin">Sign In</TabsTrigger>
-              <TabsTrigger className={mode === 'signup' ? "bg-blue-500" : ""} value="signup">Sign Up</TabsTrigger>
+        <CardContent>
+          <Tabs value={mode} onValueChange={(v) => {
+            setMode(v as 'signin' | 'signup')
+            setError('')       // Clear errors
+            setEmail('')       // Clear email input
+            setPassword('')    // Clear password input
+            setRole('BUYER')   // Reset role
+          }}>
+            <TabsList className="grid w-full grid-cols-2 mb-6">
+              <TabsTrigger value="signin">Sign In</TabsTrigger>
+              <TabsTrigger value="signup">Sign Up</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="signin" className="space-y-4">
-              <form onSubmit={handleSignIn} className="space-y-4">
-                <InputGroup
-                  mode={mode}
-                  email={email} setEmail={setEmail}
-                  password={password} setPassword={setPassword}
-                  role={role} setRole={setRole}
-                />
-                {error && <p className="text-red-500 text-sm">{error}</p>}
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? 'Signing in...' : 'Sign In'}
-                </Button>
-              </form>
-            </TabsContent>
+            <form onSubmit={mode === 'signin' ? handleSignIn : handleSignUp} className="space-y-4">
+              <InputGroup
+                mode={mode}
+                email={email} setEmail={setEmail}
+                password={password} setPassword={setPassword}
+                role={role} setRole={setRole}
+              />
+              
+              {error && (
+                <div className="p-3 text-sm text-red-500 bg-red-50 rounded-md border border-red-100">
+                  {error}
+                </div>
+              )}
 
-            <TabsContent value="signup" className="space-y-4">
-              <form onSubmit={handleSignUp} className="space-y-4">
-                <InputGroup
-                  mode={mode}
-                  email={email} setEmail={setEmail}
-                  password={password} setPassword={setPassword}
-                  role={role} setRole={setRole}
-                />
-                {error && <p className="text-red-500 text-sm">{error}</p>}
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? 'Creating account...' : 'Sign Up'}
-                </Button>
-              </form>
-            </TabsContent>
+              <Button type="submit" className="w-full h-11" disabled={isLoading}>
+                {isLoading 
+                  ? (mode === 'signin' ? 'Signing in...' : 'Creating account...') 
+                  : (mode === 'signin' ? 'Sign In' : 'Sign Up')
+                }
+              </Button>
+            </form>
           </Tabs>
 
-          <div className="mt-4 text-center text-sm text-muted-foreground">
-            <p>Demo mode: Use any email and password</p>
+          <div className="mt-6 text-center text-xs text-muted-foreground">
+            <p>By continuing, you agree to our Terms of Service.</p>
           </div>
         </CardContent>
       </Card>
     </div>
   )
 }
+
+// --- Sub-component for cleaner organization ---
 
 interface InputGroupProps {
   mode: 'signin' | 'signup'
@@ -114,114 +113,62 @@ interface InputGroupProps {
   setRole: (val: UserRole) => void
 }
 
-
-function InputGroup({
-  mode,
-  email,
-  setEmail,
-  password,
-  setPassword,
-  role,
-  setRole,
-  errors,
-}: InputGroupProps & { errors?: { email?: string; password?: string } }) {
+function InputGroup({ mode, email, setEmail, password, setPassword, role, setRole }: InputGroupProps) {
   const [showPassword, setShowPassword] = useState(false)
 
   return (
     <>
-      {/* Email */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-slate-700">
-          Email address
-        </label>
-
+        <label className="text-sm font-medium text-slate-700">Email address</label>
         <div className="relative">
-          <Mail
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-            size={18}
-          />
+          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
           <Input
             type="email"
-            placeholder="mail@example.com"
+            placeholder="name@company.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className={`pl-10 h-11 ${
-              errors?.email ? "border-destructive" : ""
-            }`}
+            className="pl-10 h-11"
             required
           />
         </div>
-
-        {errors?.email && (
-          <p className="text-destructive text-xs">{errors.email}</p>
-        )}
       </div>
 
-      {/* Password */}
       <div className="space-y-2">
         <div className="flex justify-between items-center">
-          <label className="text-sm font-medium text-slate-700">
-            Password
-          </label>
-
+          <label className="text-sm font-medium text-slate-700">Password</label>
           {mode === "signin" && (
-            <a
-              href="#"
-              className="text-xs text-primary hover:underline"
-            >
+            <button type="button" className="text-xs text-blue-600 hover:underline">
               Forgot password?
-            </a>
+            </button>
           )}
         </div>
-
         <div className="relative">
-          <Lock
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-            size={18}
-          />
+          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
           <Input
             type={showPassword ? "text" : "password"}
-            placeholder="Enter your password"
+            placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className={`pl-10 h-11 pr-10 ${
-              errors?.password ? "border-destructive" : ""
-            }`}
+            className="pl-10 h-11 pr-10"
             required
           />
-
-          {/* Eye icon for show/hide */}
-          {showPassword ? (
-            <EyeOff
-              size={18}
-              className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-slate-400"
-              onClick={() => setShowPassword(false)}
-            />
-          ) : (
-            <Eye
-              size={18}
-              className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-slate-400"
-              onClick={() => setShowPassword(true)}
-            />
-          )}
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+          >
+            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+          </button>
         </div>
-
-        {errors?.password && (
-          <p className="text-destructive text-xs">{errors.password}</p>
-        )}
       </div>
 
-      {/* Account Type (Signup Only) */}
       {mode === "signup" && (
         <div className="space-y-2">
-          <label className="text-sm font-medium text-slate-700">
-            Account Type
-          </label>
-
+          <label className="text-sm font-medium text-slate-700">Account Type</label>
           <select
             value={role}
             onChange={(e) => setRole(e.target.value as UserRole)}
-            className="w-full h-11 px-3 border border-input rounded-md bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+            className="w-full h-11 px-3 border border-input rounded-md bg-background text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
           >
             <option value="BUYER">Customer</option>
             <option value="SELLER">Owner</option>
