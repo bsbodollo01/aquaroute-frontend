@@ -3,10 +3,11 @@
 import { Droplets } from "lucide-react"
 import NotificationDropdown from "@/components/Notification/Notification"
 import ProfileMenuDropdown from "@/components/Profile/ProfileDropdown"
+import { UserInfo } from "@/utils/userTypes"
 
 interface HeaderProps {
   logo: string
-  user: string
+  user: UserInfo
   onLogout?: () => void
 }
 
@@ -19,14 +20,14 @@ const Navbar = ({ logo, user, onLogout }: HeaderProps) => {
           <div className="flex flex-col">
             <h1 className="text-3xl text-secondary-foreground font-bold">Dashboard</h1>
             <p className="text-sm text-gray-400 opacity-90">
-              Manage your orders - {user}
+              Manage your orders - {user.email}
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
           <NotificationDropdown />
-          <ProfileMenuDropdown onLogout={onLogout} />
+          <ProfileMenuDropdown userInfo={user} onLogout={onLogout} />
         </div>
       </div>
     </header>

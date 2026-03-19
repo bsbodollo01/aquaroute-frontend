@@ -11,32 +11,29 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { User, Package, LogOut, Store } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { UserInfo } from "@/utils/userTypes"
 
-type Props = {
-  user: {
-    name: string
-    role: "buyer" | "seller"
-    avatar?: string
-  }
+interface DropdownProps {
+  user: UserInfo
+  onLogout?: () => void
 }
-
-export function ProfileDropdown({ user }: Props) {
+export function ProfileDropdown({ user, onLogout }: DropdownProps) {
   const router = useRouter()
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="outline-none">
         <Avatar className="h-9 w-9 cursor-pointer">
-          <AvatarImage src={user.avatar} />
+          <AvatarImage src={user.email.charAt(0)} />
           <AvatarFallback>
-            {user.name.charAt(0)}
+            {user.email.charAt(0)}
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel className="flex flex-col">
-          <span className="font-medium">{user.name}</span>
+          <span className="font-medium">{user?.email.split('@')[0]}</span>
           <span className="text-xs text-muted-foreground capitalize">
             {user.role}
           </span>
