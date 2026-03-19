@@ -11,21 +11,21 @@ export default function ProtectedRoute({
   children: React.ReactNode;
   allowedRole?: UserRole;
 }) {
-  const { user, loading } = useAuth();
+  const { user, isLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (!isLoading && !user) {
       router.push("/auth");
       return;
     }
     
-    if (!loading && user && allowedRole && user.role !== allowedRole) {
+    if (!isLoading && user && allowedRole && user.role !== allowedRole) {
       router.push("/auth");
     }
-  }, [user, loading, allowedRole, router]);
+  }, [user, isLoading, allowedRole, router]);
 
-  if (loading) return <div>Loading...</div>;
+  if (isLoading) return <div>Loading...</div>;
   if (!user) return null;
 
   return <>{children}</>;
