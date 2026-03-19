@@ -51,12 +51,13 @@ export default function DashboardPage() {
     }
     fetchOrders()
   }, [])
+  
 
   return (
     <div className="min-h-screen bg-background">
       <Header
           logo='qwe'
-          user='test'
+          user={user}
           onLogout={logout}
       />
 
