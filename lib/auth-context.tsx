@@ -56,8 +56,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const redirectByRole = (role: UserRole) => {
     return role === "BUYER"
-      ? "/buyer/dashboard"
-      : "/seller/dashboard";
+      ? "/dashboard"
+      : "/owner";
   };
 
   const handleAuthSuccess = (data: any) => {
@@ -66,6 +66,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       email: data.user.email,
       role: data.user.role,
     };
+
+    console.log("asd", data)
 
     localStorage.setItem(STORAGE_USER_KEY, JSON.stringify(authUser));
     if (data.token) localStorage.setItem(STORAGE_TOKEN_KEY, data.token);

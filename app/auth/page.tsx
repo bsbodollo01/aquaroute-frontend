@@ -7,8 +7,9 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { registerUser, loginUser } from '@/services/auth'
+import { registerUser } from '@/services/auth'
 import { Lock, Mail, Eye, EyeOff } from "lucide-react"
+import { useAuth } from "@/lib/auth-context"
 
 export default function AuthPage() {
   const router = useRouter()
@@ -18,6 +19,7 @@ export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [mode, setMode] = useState<'signin' | 'signup'>('signin')
+  const { signIn } = useAuth()
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -38,17 +40,9 @@ export default function AuthPage() {
     e.preventDefault()
     setIsLoading(true)
     setError('')
-
+  
     try {
-      const data = await loginUser(email, password)
-
-      localStorage.setItem("auth_user", JSON.stringify(data.user))
-      localStorage.setItem("token", data.token)
-
-      router.push(
-        data.user.role === "SELLER" ? "/owner" : "/dashboard"
-      )
-
+      await signIn(email, password) // ✅ use context
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Sign in failed')
     } finally {

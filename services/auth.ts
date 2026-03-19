@@ -5,6 +5,3 @@ export const registerUser = (data: {
   password: string;
   role: "BUYER" | "SELLER";
 }) => apiFetch("/auth/register", { method: "POST", body: JSON.stringify(data) });
-
-export const loginUser = (email: string, password: string) =>
-  apiFetch("/auth/login", { method: "POST", body: JSON.stringify({ email, password }) });
