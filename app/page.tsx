@@ -11,8 +11,7 @@ import HeroPage from '@/components/Hero/Hero'
 import FeaturesPage from '@/components/Features/Feature'
 
 export default function HomePage() {
-  const router = useRouter()
-  const { user, loading } = useAuth()
+  const { isLoading } = useAuth()
 
   // useEffect(() => {
   //   if (!loading && user) {
@@ -20,7 +19,7 @@ export default function HomePage() {
   //   }
   // }, [user, loading, router])
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <p className="text-lg text-muted-foreground">Loading...</p>
