@@ -4,6 +4,7 @@ export interface Order {
   address: string
   phone: string
   status: 'pending' | 'confirmed' | 'delivered'
+  totalPrice: number
   createdAt: string
 }
 

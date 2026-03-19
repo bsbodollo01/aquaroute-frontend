@@ -6,17 +6,11 @@ import { useAuth } from '@/lib/auth-context'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { MapPin, Phone, LogOut } from 'lucide-react'
+import { MapPin, Phone, Clock } from 'lucide-react'
 import Header from "@/components/SellerDashboard/Header"
-
-interface Order {
-  id: string
-  gallons: number
-  address: string
-  phone: string
-  status: 'pending' | 'confirmed' | 'delivered'
-  createdAt: string
-}
+import { createOrder, getOrders } from "@/services/order"
+import { Order } from "@/utils/orderTypes"
+import OrderHistory from "../Orders/OrderHistory"
 
 export default function DashboardPage() {
   const { user, signOut } = useAuth()
@@ -40,26 +34,23 @@ export default function DashboardPage() {
     setIsLoading(true)
 
     try {
-      const newOrder: Order = {
-        id: `order_${Date.now()}`,
-        gallons,
-        address,
-        phone,
-        status: 'pending',
-        createdAt: new Date().toISOString(),
-      }
-
-      const existingOrders = localStorage.getItem('orders') ? JSON.parse(localStorage.getItem('orders')!) : []
-      localStorage.setItem('orders', JSON.stringify([newOrder, ...existingOrders]))
-
+      const newOrder = await createOrder(user.id, gallons)
       setOrders([newOrder, ...orders])
       setAddress('')
       setPhone('')
-      setGallons(5)
+      setGallons(1)
     } finally {
       setIsLoading(false)
     }
   }
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      const orders = await getOrders()
+      setOrders(orders)
+    }
+    fetchOrders()
+  }, [])
 
   return (
     <div className="min-h-screen bg-background">
@@ -74,10 +65,10 @@ export default function DashboardPage() {
 
           {/* Booking Form */}
           <Card className="shadow-lg rounded-xl">
-            <CardHeader className="border-b border-border/10 pb-4">
+            <CardHeader className="border-b border-border/10">
               <CardTitle className="text-lg font-semibold">Book Water Container Delivery</CardTitle>
             </CardHeader>
-            <CardContent className="pt-6">
+            <CardContent className="">
               <form onSubmit={handleBooking} className="space-y-5">
 
                 {/* Gallons */}
@@ -90,7 +81,7 @@ export default function DashboardPage() {
                       min={1}
                       value={gallons}
                       onChange={(e) => setGallons(Math.max(1, parseInt(e.target.value) || 1))}
-                      className="w-20 text-center"
+                      className="w-full text-center bg-slate-100"
                     />
                     <Button type="button" variant="outline" onClick={() => setGallons(gallons + 1)}>+</Button>
                   </div>
@@ -106,6 +97,7 @@ export default function DashboardPage() {
                       value={address}
                       onChange={(e) => setAddress(e.target.value)}
                       required
+                      className="w-full text-center bg-slate-100"
                     />
                   </div>
                 </div>
@@ -120,6 +112,7 @@ export default function DashboardPage() {
                       placeholder="+1 (555) 000-0000"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
+                      className="w-full text-center bg-slate-100"
                       required
                     />
                   </div>
@@ -131,45 +124,9 @@ export default function DashboardPage() {
               </form>
             </CardContent>
           </Card>
-
-          {/* Order History */}
-          <Card className="shadow-lg rounded-xl">
-            <CardHeader className="border-b border-border/10 pb-4">
-              <CardTitle className="text-lg font-semibold">Your Orders</CardTitle>
-            </CardHeader>
-            <CardContent className="pt-6">
-              {orders.length === 0 ? (
-                <p className="text-center text-muted-foreground py-10">No orders yet. Start by booking a delivery!</p>
-              ) : (
-                <div className="space-y-4">
-                  {orders.map((order) => (
-                    <Card key={order.id} className="p-4 bg-card border rounded-lg">
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-semibold">{order.gallons} Gallon(s)</h3>
-                        <span className={`text-xs px-2 py-1 rounded-full ${
-                          order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                          order.status === 'confirmed' ? 'bg-blue-100 text-blue-800' :
-                          'bg-green-100 text-green-800'
-                        }`}>
-                          {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                        </span>
-                      </div>
-                      <p className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
-                        <MapPin size={16} /> {order.address}
-                      </p>
-                      <p className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Phone size={16} /> {order.phone}
-                      </p>
-                      <p className="text-xs text-muted-foreground mt-2">
-                        {new Date(order.createdAt).toLocaleDateString()}
-                      </p>
-                    </Card>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
+          <OrderHistory 
+            orders={orders}
+          />
         </div>
       </main>
     </div>
